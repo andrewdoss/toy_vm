@@ -8,7 +8,7 @@ class ToyVM:
             self.load_program(program)
         else:
             # Default to program with immediate halt
-            self.memory = bytearray([int('0xff', 16)]) + bytearray([0] * 19)
+            self.memory = bytearray([0xff]) + bytearray([0] * 19)
         self.regs = [0] * 3
         self.word_max = word_max
         
@@ -55,17 +55,17 @@ class ToyVM:
             instruction = self.memory[self.regs[0]]
 
             # Decode and execute instruction
-            if instruction == int('0x01', 16):
+            if instruction == 0x01:
                 self.load_word(self.memory[self.regs[0]+1],
                                self.memory[self.regs[0]+2])
-            elif instruction == int('0x02', 16):
+            elif instruction == 0x02:
                 self.store_word(self.memory[self.regs[0]+1],
                                self.memory[self.regs[0]+2])
-            elif instruction == int('0x03', 16):
+            elif instruction == 0x03:
                 self.add()
-            elif instruction == int('0x04', 16):
+            elif instruction == 0x04:
                 self.sub()
-            elif instruction == int('0xff', 16):
+            elif instruction == 0xff:
                 break
             else:
                 raise ValueError(f'Program contains invalid instruction' 
@@ -78,30 +78,30 @@ class ToyVM:
 
 if __name__ == "__main__":
     # Provided addition example: 5281 + 12 = 5293
-    test_program_1 = ([int(x, 16) for x in ['0x01', '0x01', '0x10',
-                                            '0x01', '0x02', '0x12',
-                                            '0x03', '0x01', '0x02',
-                                            '0x02', '0x01', '0x0e',
-                                            '0xff',
-                                            '0x00',
-                                            '0x00', '0x00',
-                                            '0xa1', '0x14',
-                                            '0x0c', '0x00']], 5293)
+    test_program_1 = ([0x01, 0x01, 0x10,
+                       0x01, 0x02, 0x12,
+                       0x03, 0x01, 0x02,
+                       0x02, 0x01, 0x0e,
+                       0xff,
+                       0x00,
+                       0x00, 0x00,
+                       0xa1, 0x14,
+                       0x0c, 0x00], 5293)
 
     # Construct VM and run
     toy_vm = ToyVM(test_program_1[0]).run()
     assert toy_vm.decode_word(toy_vm.memory[14:16]) == test_program_1[1], 'Test program 1 failed.'
 
     # Subtraction example: 8746 - 2020 = 6726
-    test_program_2 = ([int(x, 16) for x in ['0x01', '0x01', '0x10',
-                                            '0x01', '0x02', '0x12',
-                                            '0x04', '0x01', '0x02',
-                                            '0x02', '0x01', '0x0e',
-                                            '0xff',
-                                            '0x00',
-                                            '0x00', '0x00',
-                                            '0x2a', '0x22',
-                                            '0xe4', '0x07']], 6726)
+    test_program_2 = ([0x01, 0x01, 0x10,
+                       0x01, 0x02, 0x12,
+                       0x04, 0x01, 0x02,
+                       0x02, 0x01, 0x0e,
+                       0xff,
+                       0x00,
+                       0x00, 0x00,
+                       0x2a, 0x22,
+                       0xe4, 0x07], 6726)
 
     # Construct VM and run
     toy_vm = ToyVM(test_program_2[0]).run()
