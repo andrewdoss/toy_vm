@@ -13,7 +13,7 @@ class ToyVM:
         self.word_max = word_max
         
     def encode_word(self, num):
-        """Incodes an int into a little-endian word."""
+        """Encodes an int into a little-endian word."""
         return bytearray([num % 256, num // 256])
 
     def decode_word(self, word):
